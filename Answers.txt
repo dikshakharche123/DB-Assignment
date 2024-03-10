@@ -1,0 +1,56 @@
+1) thExplain e relationship between the "Product" and "Product_Category" entities from the above diagram.
+Answer=The "Product" and "Product_Category" entities are related through a foreign key relationship. In the "Product" table, there is a column named category_id, which is a foreign key referencing the id column in the "Product_Category" table. This indicates that each product in the "Product" table is associated with a specific category from the "Product_Category" table.
+2)How could you ensure that each product in the "Product" table has a valid category assigned to it?
+Answer=To ensure that each product in the "Product" table has a valid category assigned to it, you can enforce the foreign key constraint. This constraint will ensure that the values in the category_id column of the "Product" table must match the values in the id column of the "Product_Category" table. This prevents the insertion of records into the "Product" table with invalid or non-existent category references.
+Here's an example SQL statement to create the foreign key constraint:
+alter table Product
+add constraint FK_Product_Category
+foreigen key (category_id)
+references Product_Category(id);
+3)Create schema in any Database script or any ORM (Object Relational Mapping).
+Answer=
+-- Create Product_Category table
+CREATE TABLE Product_Category (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    description VARCHAR(255),
+    created_at TIMESTAMP,
+    modified_at TIMESTAMP,
+    deleted_at TIMESTAMP
+);
+-- Create Product_Inventory table
+CREATE TABLE Product_Inventory (
+    id INT PRIMARY KEY,
+    quantity INT,
+    created_at TIMESTAMP,
+    modified_at TIMESTAMP,
+    deleted_at TIMESTAMP
+);
+-- Create Discount table
+CREATE TABLE Discount (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    description VARCHAR(255),
+    discount_percent DECIMAL(5,2),
+    active BOOLEAN,
+    created_at TIMESTAMP,
+    modified_at TIMESTAMP,
+    deleted_at TIMESTAMP
+);
+-- Create Product table with foreign keys
+CREATE TABLE Product (
+    id INT PRIMARY KEY,
+    name VARCHAR(255),
+    description VARCHAR(255),
+    sku VARCHAR(50),
+    category_id INT,
+    inventory_id INT,
+    price DECIMAL(10,2),
+    discount_id INT,
+    created_at TIMESTAMP,
+    modified_at TIMESTAMP,
+    deleted_at TIMESTAMP,
+    FOREIGN KEY (category_id) REFERENCES Product_Category(id),
+    FOREIGN KEY (inventory_id) REFERENCES Product_Inventory(id),
+    FOREIGN KEY (discount_id) REFERENCES Discount(id)
+);
